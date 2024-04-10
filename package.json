@@ -1,0 +1,11 @@
+{
+  "name": "todoapp",
+  "version": "1.0.0",
+  "description": "Simple ToDo App to create. update, check, delete todo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Swarnab Banerjee",
+  "license": "ISC"
+}
