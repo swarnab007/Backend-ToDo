@@ -7,7 +7,7 @@ import userRouter from "./routes/user.routes.js"
 const app = express();
 
 config({
-  path: "./data/config.env",
+  path: "./.env",
 });
 
 // using middlewares

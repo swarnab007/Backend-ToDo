@@ -2,7 +2,6 @@ import { User } from "../models/user.model.js";
 import { ErrorHandler } from "../middlewares/error.js";
 import bcrypt from "bcrypt";
 import { sendCookie } from "../utils/features.js";
-import uploadCloudinary from "../utils/fileUpload.js";
 
 export const register = async (req, res) => {
     console.log(req.body);
@@ -21,15 +20,12 @@ export const register = async (req, res) => {
       $or: [{ username }, { email }],
     });
     if (user) return res.next(new ErrorHandler("User Already exists", 400));
-    // const hashedPass = await bcrypt.hash(password, 10);
-    const avatarRes = await uploadCloudinary(req.files.avatar[0]);
-    console.log(avatarRes);
+    const hashedPass = await bcrypt.hash(password, 10);
     user = await User.create({
       username: username.toLowerCase(),
       fullname,
       email,
-      password,
-      avatar: avatarRes.url,
+      password: hashedPass
     });
     return sendCookie(user, res, "Registered successfully", 201);
   } catch (error) {
