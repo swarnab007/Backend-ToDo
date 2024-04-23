@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { sendCookie } from "../utils/features.js";
 
 export const register = async (req, res) => {
-    console.log(req.body);
+  console.log(req.body);
   try {
     const { username, email, fullname, password } = req.body;
     console.log(username, password);
@@ -25,16 +25,31 @@ export const register = async (req, res) => {
       username: username.toLowerCase(),
       fullname,
       email,
-      password: hashedPass
+      password: hashedPass,
     });
     return sendCookie(user, res, "Registered successfully", 201);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    console.log(username);
+    let loginUser = await User.findOne({username}).select("+password");
+    if (!loginUser) return res.send(new ErrorHandler("Register First", 400));
+    const isMatchedPass = bcrypt.compare(password, loginUser.password);
+    if (!isMatchedPass)
+      return res.send(new ErrorHandler("Wrong Password !", 400));
+
+    sendCookie(loginUser, res, `Welcome Back ${loginUser.fullname}`, 200);
   } catch (error) {
     console.log(error);
     // next(error);
   }
 };
-
-export const login = async (req, res) => {};
 
 export const logout = async (req, res) => {};
 
