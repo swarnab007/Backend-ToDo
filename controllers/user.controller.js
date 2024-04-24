@@ -38,19 +38,34 @@ export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
     console.log(username);
-    let loginUser = await User.findOne({username}).select("+password");
-    if (!loginUser) return res.send(new ErrorHandler("Register First", 400));
-    const isMatchedPass = bcrypt.compare(password, loginUser.password);
+    let user = await User.findOne({username}).select("+password");
+    if (!user) return res.send(new ErrorHandler("Register First", 400));
+    const isMatchedPass = bcrypt.compare(password, user.password);
     if (!isMatchedPass)
       return res.send(new ErrorHandler("Wrong Password !", 400));
 
-    sendCookie(loginUser, res, `Welcome Back ${loginUser.fullname}`, 200);
+    sendCookie(user, res, `Welcome Back ${user.fullname}`, 200);
   } catch (error) {
     console.log(error);
     // next(error);
   }
 };
 
-export const logout = async (req, res) => {};
+export const logout = async (req, res) => {
+  res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(Date.now()),
+    })
+    .json({
+      success: true,
+      user: req.user,
+    });
+};
 
-export const getProfile = async (req, res) => {};
+export const getProfile = (req, res) => {
+  res.status(200).json({
+    success: true,
+    user: req.user
+  })
+};

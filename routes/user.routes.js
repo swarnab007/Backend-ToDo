@@ -5,13 +5,14 @@ import {
   logout,
   getProfile,
 } from "../controllers/user.controller.js";
+import { isAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.post("/register",register)
+router.post("/register", register);
 router.post("/login", login);
 
 router.get("/logout", logout);
-router.get("/profile", getProfile);
+router.get("/profile", isAuth, getProfile);
 
-export default router
+export default router;
