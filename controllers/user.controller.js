@@ -3,7 +3,7 @@ import { ErrorHandler } from "../middlewares/error.js";
 import bcrypt from "bcrypt";
 import { sendCookie } from "../utils/features.js";
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   console.log(req.body);
   try {
     const { username, email, fullname, password } = req.body;
@@ -19,10 +19,10 @@ export const register = async (req, res) => {
     let user = await User.findOne({
       $or: [{ username }, { email }],
     });
-    if (user) return res.next(new ErrorHandler("User Already exists", 400));
+    if (user) return res.send(new ErrorHandler("User Already exists", 400));
     const hashedPass = await bcrypt.hash(password, 10);
     user = await User.create({
-      username: username.toLowerCase(),
+      username,
       fullname,
       email,
       password: hashedPass,
