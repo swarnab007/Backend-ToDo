@@ -7,6 +7,7 @@ import taskRouter from "./routes/tasks.routes.js";
 import { errorMiddleware } from "./middlewares/error.js";
 
 const app = express();
+app.use(cors());
 
 config({
   path: "./.env",
