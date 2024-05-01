@@ -36,9 +36,11 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res) => {
   try {
+    console.log(req.body);
     const { username, password } = req.body;
     console.log(username);
     let user = await User.findOne({username}).select("+password");
+    
     if (!user) return res.send(new ErrorHandler("Register First", 400));
     const isMatchedPass = bcrypt.compare(password, user.password);
     if (!isMatchedPass)
