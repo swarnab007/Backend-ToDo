@@ -5,7 +5,9 @@ import { config } from "dotenv";
 config({
     path: "./.env",
   });
-connectDB();
-app.listen(process.env.PORT, () => {
-    console.log(`Server is listening ${process.env.PORT}`);
+// connectDB();
+
+const PORT = 5000;
+app.listen(PORT, () => {
+    console.log(`Server is listening at ${PORT}`);
 })
